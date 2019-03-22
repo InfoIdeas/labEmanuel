@@ -9,6 +9,7 @@ class App extends Component{
                         <a className="brand-logo" href="/">Laboratorio Clínico</a>
                     </div>
                 </nav>
+                
                 <div className="container">
                     <div className="row">
                         <div className="col s5">
