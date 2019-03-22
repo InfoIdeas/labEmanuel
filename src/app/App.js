@@ -1,6 +1,20 @@
 import React, { Component } from 'react';
 
 class App extends Component{
+
+    constructor(){
+        super();
+        this.state = {
+            title: '',
+            Description:''
+        };
+        this.addLab = this.addLab.bind(this); 
+    }
+
+    addLab(e){
+        console.log(this.state);
+        e.preventDefault();
+    }
     render(){
         return(
             <div>
@@ -15,7 +29,7 @@ class App extends Component{
                         <div className="col s5">
                             <div className="card">
                                 <div className="card-content">
-                                <form>
+                                <form onSubmit={this.addLab}>
                                     <div className="row">
                                         <div className="input-field col s12">
                                             <input type="text" placeholder="Nombre Paciente" />
