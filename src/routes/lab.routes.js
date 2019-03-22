@@ -16,5 +16,16 @@ router.post('/', async (req, res)=>{
     console.log(lab);
     res.json({status: 'Reactivo Guardado'});
 })
+
+router.put('/:id', async (req, res)=> {
+    const { title, description } = req.body;
+    const newLab = { title, description };
+    await Lab.findByIdAndUpdate(req.params.id, newLab)
+    res.json({status:'Reactivo Actualizado'})
+})
+
+router.delete('/:id', async (req,res)=>{
+    await Lab.findByIdAndRemove(req.params.id);
+})
 module.exports = router;
 
