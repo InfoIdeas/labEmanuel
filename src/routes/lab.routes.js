@@ -9,6 +9,11 @@ router.get('/' , async (req, res)=> {
     res.json(labs);
 });
 
+router.get ('/:id', async(req, res)=> {
+    const lab = await Lab.findById(req.params.id);
+    res.json(lab);
+})
+
 router.post('/', async (req, res)=>{
     const {title, description } = req.body; 
     const lab = new Lab({title, description});
@@ -26,6 +31,7 @@ router.put('/:id', async (req, res)=> {
 
 router.delete('/:id', async (req,res)=>{
     await Lab.findByIdAndRemove(req.params.id);
+    res.json({status:'Reactivo Eliminado'});
 })
 module.exports = router;
 
