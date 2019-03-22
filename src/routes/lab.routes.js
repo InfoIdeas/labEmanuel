@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router(); 
 
-//const Lab = require('../models/labdb');
+const Lab = require('../models/labdb');
 
 router.get('/' , async (req, res)=> {
     const labs = await Lab.find();

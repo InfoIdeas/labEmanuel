@@ -6,15 +6,40 @@ class App extends Component{
         super();
         this.state = {
             title: '',
-            Description:''
+            description:''
         };
+        this.handleChange = this.handleChange.bind(this);
         this.addLab = this.addLab.bind(this); 
     }
 
     addLab(e){
-        console.log(this.state);
+        fetch('/api/labs', {
+            method: 'POST',
+            body: JSON.stringify(this.state),
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(res=> res.json())
+            .then(data=>{
+                console.log(data)
+                M.toast({html: 'Paciente Guardado'});
+                this.setState({title:'', description:''}); 
+            })
+            .catch(err=> console.error(err));
+
         e.preventDefault();
     }
+
+    handleChange(e){
+        const { name, value} = e.target;
+        this.setState({
+            [name]:value
+
+        });
+    }
+
     render(){
         return(
             <div>
@@ -32,12 +57,12 @@ class App extends Component{
                                 <form onSubmit={this.addLab}>
                                     <div className="row">
                                         <div className="input-field col s12">
-                                            <input type="text" placeholder="Nombre Paciente" />
+                                            <input name="title" onChange={this.handleChange} type="text" placeholder="Nombre Paciente" value={this.state.title}/>
                                         </div>
                                     </div>
                                     <div className="row">
                                         <div className="input-field col s12">
-                                            <textarea placeholder="Resultado CLinico" className="materialize-textarea"></textarea>
+                                            <textarea name="description" onChange={this.handleChange} placeholder="Resultado CLinico" className="materialize-textarea" value={this.state.description}></textarea>
                                         </div>
                                     </div>
                                     <button type="submit" className="btn btn-blue darken-4">
