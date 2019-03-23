@@ -6,30 +6,103 @@ class App extends Component{
         super();
         this.state = {
             title: '',
-            description:''
+            description:'',
+            labs:[],
+            _id:''
         };
         this.handleChange = this.handleChange.bind(this);
         this.addLab = this.addLab.bind(this); 
     }
 
     addLab(e){
-        fetch('/api/labs', {
-            method: 'POST',
-            body: JSON.stringify(this.state),
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            }
-        })
+       if (this.state._id){
+            fetch(`/api/lab/${this.state._id}`, {
+                method:'PUT',
+                body: JSON.stringify(this.state),
+                headers:{
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(res => res.json())
+            .then(data=> {
+                console.log(data);
+                M.toast({html: 'Paciente Actualizado'});
+                this.setState({title:'', description:'', _id:''});
+                this.fetchLabs();
+            
+            });
+       } else {
+            fetch('/api/lab', {
+                method: 'POST',
+                body: JSON.stringify(this.state),
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }
+            })
             .then(res=> res.json())
             .then(data=>{
                 console.log(data)
                 M.toast({html: 'Paciente Guardado'});
                 this.setState({title:'', description:''}); 
+                this.fetchLabs();
             })
             .catch(err=> console.error(err));
+       }
 
         e.preventDefault();
+    }
+
+    componentDidMount(){
+        this.fetchLabs();
+    }
+    fetchLabs(){
+        fetch('/api/lab')
+            .then(res=> res.json())
+            .then(data=> {
+                this.setState({labs: data});
+                console.log(this.state.labs);
+            }); 
+
+    }
+
+    deleteLab(id){
+        if (confirm('Seguro que desea eliminar')){
+            fetch( `/api/lab/${id}`,{
+                method: 'DELETE',
+                headers:{
+                    'Accept': 'applicaction/json',
+                    'Content-Type': 'application/json'
+                }
+    
+            }) 
+            .then(res => res.json())
+            .then(data => {
+                console.log(data);
+                M.toast({html:'Paciente Borrado'});
+                this.fetchLabs();
+                
+            });
+    
+            console.log('deleting:', id);
+        }
+    
+        
+    }
+    editLab(id) {
+        fetch(`/api/lab/${id}`)
+        .then(res=> res.json())
+        .then(data => { 
+            console.log(data)
+            this.setState({
+                title: data.title,
+                description: data.description,
+                _id:data._id
+
+            })
+        });
+
     }
 
     handleChange(e){
@@ -72,7 +145,38 @@ class App extends Component{
                                 </div>
                             </div>
                         </div>
-                        <div className="col s7"></div>
+                        <div className="col s7">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Paciente</th>
+                                        <th>Caso Clinico</th>               
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {
+                                        this.state.labs.map(lab =>{
+                                            return (
+                                            <tr key={lab._id}>
+                                                <td>{lab.title}</td>
+                                                <td>{lab.description}</td>
+                                                <td>
+                                                    <button className="btn light-blue darken-4" onClick={() => this.deleteLab (lab._id)}>
+                                                        <i className="material-icons">delete</i>
+                                                    </button>
+                                                    <button onClick={() => this.editLab(lab._id)} className="btn light-blue darken-4" style={{margin: '4px'}}>
+                                                    <i className="material-icons">edit</i>
+                                                    </button>    
+                                                    
+                                                </td>
+                                            </tr>                                            
+                                            )
+                                        
+                                        })
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
