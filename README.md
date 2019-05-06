@@ -11,13 +11,7 @@ NODEJS
 instalar en primera instancia MongoDB Atlas para trabajar con la base de datos NOSQL de mongodb
 
 Para instalar y configurar  la app es necesario instalar mediante npm los siguientes modulos 
-- npm install express
-- npm install nodemon -D
-- npm install morgan
-- npm install mongoose (para conectar con la base de datos)
-- npm install react react-dom -D
-- npm install babel-core babel-loader babel-preset-react babel-preset-env -D
-
+- npm install 
 UNa vez instalados estos modulos correr la app usando 
 - npm run dev 
 si vas a hacer modificaciones en el codigo aplicar esto en otra ventana de comandos
